@@ -4,25 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toppings</title>
+    <style>
+        .container {
+            display: flex;
+        }
+        .half {
+            width: 50%;
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Toppings</h1>
-    <ul>
-        {% for topping in toppings %}
-        <li>{{ topping }} - 
-            <form action="/remove_topping/{{ topping }}" method="get" style="display:inline;">
-                <button type="submit">Remove</button>
-            </form>
-            <form action="/edit_topping/{{ topping }}" method="post" style="display:inline;">
+    <div class="container">
+        <div class="half">
+            <h1>Toppings</h1>
+            <ul>
+                {% for topping in toppings %}
+                <li>{{ topping }} - 
+                    <form action="/remove_topping/{{ topping }}" method="get" style="display:inline;">
+                        <button type="submit">Remove</button>
+                    </form>
+                    <form action="/edit_topping/{{ topping }}" method="post" style="display:inline;">
+                        <input type="text" name="new_topping" placeholder="Edit Topping">
+                        <button type="submit">Edit</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            <form action="/add_topping" method="post">
                 <input type="text" name="new_topping" placeholder="New Topping">
-                <button type="submit">Edit</button>
+                <button type="submit">Add Topping</button>
             </form>
-        </li>
-        {% endfor %}
-    </ul>
-    <form action="/add_topping" method="post">
-        <input type="text" name="new_topping" placeholder="New Topping">
-        <button type="submit">Add Topping</button>
-    </form>
+        </div>
+        <div class="half">
+            <h1>Pizzas</h1>
+            <h2>Add Pizza</h2>
+            <form action="/create_pizza" method="post">
+                <label for="toppings">Toppings:</label><br>
+                {% for topping in toppings %}
+                <input type="checkbox" name="toppings" value="{{ topping }}"> {{ topping }}<br>
+                {% endfor %}
+                <button type="submit">Create Pizza</button>
+            </form>
+
+            <h2>Pizza List</h2>
+            <ul>
+                {% for pizza in pizzas %}
+                <li>
+                    Toppings:
+                    {% for topping in pizza.toppings %}
+                    {{ topping }},
+                    {% endfor %}
+                    <form action="/edit_pizza/{{ index }}" method="post" style="display:inline;">
+                        <label for="toppings">Toppings:</label><br>
+                        {% for topping in available_toppings %}
+                        <input type="checkbox" name="toppings" value="{{ topping }}" {% if topping in pizza.toppings %} checked {% endif %}> {{ topping }}<br>
+                        {% endfor %}
+                        <button type="submit">Edit</button>
+                    </form>
+                    <a href="/remove_pizza/{{ loop.index }}">Remove</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
 </body>
 </html>
