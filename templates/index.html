@@ -28,7 +28,7 @@
                         <input type="text" name="new_topping" placeholder="Edit Topping">
                         <button type="submit">Edit</button>
                     </form>
-                </li>
+                </li><br>
                 {% endfor %}
             </ul>
             <form action="/add_topping" method="post">
@@ -55,15 +55,17 @@
                     {% for topping in pizza.toppings %}
                     {{ topping }},
                     {% endfor %}
-                    <form action="/edit_pizza/{{ index }}" method="post" style="display:inline;">
-                        <label for="toppings">Toppings:</label><br>
-                        {% for topping in available_toppings %}
-                        <input type="checkbox" name="toppings" value="{{ topping }}" {% if topping in pizza.toppings %} checked {% endif %}> {{ topping }}<br>
+                    <form action="/edit_pizza/{{ loop.index }}" method="post" style="display:inline;">
+                        <br><label for="toppings">Edit Toppings:</label>
+                        {% for topping in toppings %}
+                        <input type="checkbox" name="toppings" value="{{ topping }}" {% if topping in pizza.toppings %} checked {% endif %}> {{ topping }}
                         {% endfor %}
-                        <button type="submit">Edit</button>
+                        <label> || </label>
+                        <button type="submit">Update</button>
+                        <label> || </label>
                     </form>
                     <a href="/remove_pizza/{{ loop.index }}">Remove</a>
-                </li>
+                </li><br>
                 {% endfor %}
             </ul>
         </div>
